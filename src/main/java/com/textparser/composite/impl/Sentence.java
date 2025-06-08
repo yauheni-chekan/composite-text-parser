@@ -1,0 +1,33 @@
+package com.textparser.composite.impl;
+
+import com.textparser.composite.TextComposite;
+
+/**
+ * Represents a sentence in the text structure.
+ * A sentence is a composite node that can contain words and expressions.
+ */
+public class Sentence extends TextComposite {
+    @Override
+    public String getText() {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < children.size(); i++) {
+            result.append(children.get(i).getText());
+            if (i < children.size() - 1) {
+                result.append(" ");
+            }
+        }
+        result.append(". ");
+        return result.toString();
+    }
+
+    @Override
+    public void print() {
+        for (int i = 0; i < children.size(); i++) {
+            children.get(i).print();
+            if (i < children.size() - 1) {
+                System.out.print(" ");
+            }
+        }
+        System.out.print(". ");
+    }
+} 
