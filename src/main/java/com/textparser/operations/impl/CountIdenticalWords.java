@@ -1,7 +1,6 @@
 package com.textparser.operations.impl;
 
 import com.textparser.composite.impl.Document;
-import com.textparser.composite.impl.Word;
 import com.textparser.operations.TextOperation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

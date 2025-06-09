@@ -3,7 +3,6 @@ package com.textparser.parser.impl;
 import com.textparser.composite.TextComponent;
 import com.textparser.composite.impl.Lexeme;
 import com.textparser.parser.AbstractTextParser;
-import com.textparser.util.TextConstants;
 
 /**
  * Parser for lexemes.

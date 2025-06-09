@@ -2,9 +2,7 @@ package com.textparser.parser.impl;
 
 import com.textparser.composite.TextComponent;
 import com.textparser.composite.impl.Paragraph;
-import com.textparser.composite.impl.Symbol;
 import com.textparser.parser.AbstractTextParser;
-import com.textparser.util.TextConstants;
 
 /**
  * Parser for paragraphs.
