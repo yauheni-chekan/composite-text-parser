@@ -12,11 +12,18 @@ import com.textparser.util.TextConstants;
 public class Paragraph extends TextComposite {
     @Override
     public String getText() {
-        StringBuilder result = new StringBuilder(TextConstants.PARAGRAPH_INDENT);
-        for (TextComponent child : children) {
-            result.append(child.getText());
+        StringBuilder result = new StringBuilder();
+        // Add paragraph indent (tab or 4 spaces)
+        result.append("    "); // Use 4 spaces as default indent
+        
+        for (int i = 0; i < children.size(); i++) {
+            result.append(children.get(i).getText());
+            // Add space between sentences except for the last one
+            if (i < children.size() - 1) {
+                result.append(" ");
+            }
         }
-        result.append(TextConstants.PARAGRAPH_END_PATTERN);
+        
         return result.toString();
     }
 

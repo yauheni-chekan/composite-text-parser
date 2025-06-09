@@ -15,8 +15,19 @@ import com.textparser.composite.TextComponent;
  * - Unparseable characters
  */
 public class Lexeme extends TextComposite {
+    private final String originalText;
+
     public Lexeme(String text) {
         super();
+        this.originalText = text;
+    }
+
+    /**
+     * Get the original text before parsing into components
+     * @return the original lexeme text
+     */
+    public String getOriginalText() {
+        return originalText;
     }
 
     @Override

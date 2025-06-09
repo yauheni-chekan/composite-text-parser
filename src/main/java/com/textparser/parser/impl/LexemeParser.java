@@ -19,28 +19,24 @@ import com.textparser.util.TextConstants;
 public class LexemeParser extends AbstractTextParser {
     @Override
     public TextComponent parse(String text) {
-        // Try to parse it as a word
-        if (matches(text, TextConstants.WORD_PATTERN)) {
-            return new Lexeme(text);
+        // Create a lexeme and populate it with parsed components
+        Lexeme lexeme = new Lexeme(text);
+        
+        // Try to parse as atomic components first
+        TextComponent component = parseNext(text);
+        if (component != null) {
+            lexeme.add(component);
+            return lexeme;
         }
         
-        // Try to parse it as a number
-        if (matches(text, TextConstants.NUMBER_PATTERN)) {
-            return new Lexeme(text);
+        // If can't parse as atomic, break into characters/symbols
+        for (char ch : text.toCharArray()) {
+            TextComponent symbol = parseNext(String.valueOf(ch));
+            if (symbol != null) {
+                lexeme.add(symbol);
+            }
         }
         
-        // Try to parse it as an expression
-        if (matches(text, TextConstants.EXPRESSION_PATTERN)) {
-            return new Lexeme(text);
-        }
-        
-        // Try to parse it as a word with punctuation
-        if (matches(text, TextConstants.WORD_PATTERN + TextConstants.PUNCTUATION_PATTERN)) {
-            return new Lexeme(text);
-        }
-        
-        // If none of the above, return the lexeme as is
-        // The next parser in chain will handle breaking it into symbols
-        return new Lexeme(text);
+        return lexeme;
     }
 } 

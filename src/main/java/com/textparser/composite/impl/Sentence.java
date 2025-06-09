@@ -12,11 +12,11 @@ public class Sentence extends TextComposite {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < children.size(); i++) {
             result.append(children.get(i).getText());
+            // Add space between lexemes except for the last one
             if (i < children.size() - 1) {
                 result.append(" ");
             }
         }
-        result.append(". ");
         return result.toString();
     }
 

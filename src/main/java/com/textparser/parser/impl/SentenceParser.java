@@ -13,16 +13,17 @@ import com.textparser.util.TextConstants;
 public class SentenceParser extends AbstractTextParser {
     @Override
     public TextComponent parse(String text) {
-        if (!matches(text, TextConstants.VALID_SENTENCE_PATTERN)) {
+        // Check if text looks like a sentence (starts with capital letter, ends with punctuation)
+        if (!text.matches("^[A-ZА-Я].*[.!?…]$")) {
             return parseNext(text);
         }
         
-        // Split into lexemes
-        String[] lexemeTexts = split(text, TextConstants.WHITESPACE_PATTERN);
+        // Split into lexemes by whitespace
+        String[] lexemeTexts = text.split("\\s+");
         
         Sentence sentence = new Sentence();
         for (String lexemeText : lexemeTexts) {
-            lexemeText = trim(lexemeText);
+            lexemeText = lexemeText.trim();
             if (!lexemeText.isEmpty()) {
                 TextComponent lexeme = parseNext(lexemeText);
                 if (lexeme != null) {

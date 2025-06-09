@@ -79,7 +79,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.textparser.TextParser</mainClass>
+                            <mainClass>com.textparser.Application</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
