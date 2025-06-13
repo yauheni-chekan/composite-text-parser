@@ -32,6 +32,6 @@ public class SymbolParser extends AbstractTextParser {
             return new Symbol(symbol);
         }
 
-        return parseNext(text);
+        return null;
     }
 } 

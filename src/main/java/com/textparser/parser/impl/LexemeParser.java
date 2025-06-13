@@ -27,15 +27,6 @@ public class LexemeParser extends AbstractTextParser {
             lexeme.add(component);
             return lexeme;
         }
-        
-        // If can't parse as atomic, break into characters/symbols
-        for (char ch : text.toCharArray()) {
-            TextComponent symbol = parseNext(String.valueOf(ch));
-            if (symbol != null) {
-                lexeme.add(symbol);
-            }
-        }
-        
         return lexeme;
     }
 } 

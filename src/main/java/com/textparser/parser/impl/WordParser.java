@@ -24,7 +24,7 @@ public class WordParser extends AbstractTextParser {
         }
 
         // Try to match a word followed by punctuation
-        Pattern pattern = Pattern.compile(TextConstants.WORD_WITH_PUNCTUATION_PATTERN);
+        Pattern pattern = Pattern.compile(TextConstants.WORD_WITH_PUNCTUATION_PATTERN, Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(text);
 
         if (matcher.matches()) {

@@ -27,32 +27,16 @@ public class TextParsingService {
      */
     public Document parseText(String text) {
         logger.info("Starting text parsing process");
-        
         try {
-            // Split text into paragraphs first
-            String[] paragraphs = text.split("\n\\s*\n");
-            Document document = new Document();
-            
-            for (String paragraphText : paragraphs) {
-                paragraphText = paragraphText.trim();
-                if (!paragraphText.isEmpty()) {
-                    logger.debug("Processing paragraph: {}", paragraphText.substring(0, Math.min(50, paragraphText.length())));
-                    
-                    TextComponent paragraph = parserChain.parse(paragraphText);
-                    if (paragraph != null) {
-                        document.add(paragraph);
-                        logger.debug("Successfully parsed paragraph with {} sentences", 
-                                   paragraph.getChildren().size());
-                    } else {
-                        logger.warn("Failed to parse paragraph: {}", paragraphText.substring(0, Math.min(50, paragraphText.length())));
-                    }
-                }
+            // Pass the whole text to the parser chain (now starts with DocumentParser)
+            TextComponent document = parserChain.parse(text);
+            if (document instanceof Document) {
+                logger.info("Text parsing completed. Document contains {} paragraphs", ((Document) document).getParagraphs().size());
+                return (Document) document;
+            } else {
+                logger.error("Parser chain did not return a Document instance");
+                throw new RuntimeException("Failed to parse text: not a Document");
             }
-            
-            logger.info("Text parsing completed. Document contains {} paragraphs", 
-                       document.getParagraphs().size());
-            return document;
-            
         } catch (Exception e) {
             logger.error("Error during text parsing", e);
             throw new RuntimeException("Failed to parse text", e);
@@ -66,22 +50,24 @@ public class TextParsingService {
     private TextParser createParserChain() {
         logger.debug("Creating parser chain");
         
+        DocumentParser documentParser = new DocumentParser();
         ParagraphParser paragraphParser = new ParagraphParser();
         SentenceParser sentenceParser = new SentenceParser();
-        ExpressionParser expressionParser = new ExpressionParser();
         LexemeParser lexemeParser = new LexemeParser();
         WordParser wordParser = new WordParser();
         SymbolParser symbolParser = new SymbolParser();
+        ExpressionParser expressionParser = new ExpressionParser();
 
         // Configure the chain
+        documentParser.setNext(paragraphParser);
         paragraphParser.setNext(sentenceParser);
-        sentenceParser.setNext(expressionParser);
-        expressionParser.setNext(lexemeParser);
+        sentenceParser.setNext(lexemeParser);
         lexemeParser.setNext(wordParser);
-        wordParser.setNext(symbolParser);
+        wordParser.setNext(expressionParser);
+        expressionParser.setNext(symbolParser);
 
         logger.debug("Parser chain configured successfully");
-        return paragraphParser;
+        return documentParser;
     }
 
     /**
