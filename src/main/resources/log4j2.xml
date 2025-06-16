@@ -3,17 +3,18 @@
     <Properties>
         <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Property>
         <Property name="APP_LOG_ROOT">logs</Property>
+        <Property name="CHARSET">UTF-8</Property>
     </Properties>
 
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <PatternLayout pattern="${LOG_PATTERN}" charset="${CHARSET}"/>
         </Console>
 
         <RollingFile name="FileAppender"
                      fileName="${APP_LOG_ROOT}/text-parser.log"
                      filePattern="${APP_LOG_ROOT}/text-parser-%d{yyyy-MM-dd}-%i.log">
-            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <PatternLayout pattern="${LOG_PATTERN}" charset="${CHARSET}"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1"/>
                 <SizeBasedTriggeringPolicy size="10MB"/>

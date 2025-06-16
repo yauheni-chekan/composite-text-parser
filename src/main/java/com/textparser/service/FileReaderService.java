@@ -27,10 +27,12 @@ public class FileReaderService {
         
         Path path = Paths.get(filePath);
         if (!Files.exists(path)) {
+            logger.error("File does not exist: {}", filePath);
             throw new IOException("File does not exist: " + filePath);
         }
         
         if (!Files.isRegularFile(path)) {
+            logger.error("Path is not a regular file: {}", filePath);
             throw new IOException("Path is not a regular file: " + filePath);
         }
         

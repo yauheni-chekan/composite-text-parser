@@ -24,18 +24,27 @@ public final class TextConstants {
     public static final String WHITESPACE_PATTERN = "\\s+";
 
     // Symbol patterns
-    public static final String PUNCTUATION_PATTERN = String.format("\\Q%s\\E|[.,!?;:]", ELLIPSIS);
-    public static final String LETTER_PATTERN = "[a-zA-Z]";
+    public static final String PUNCTUATION_PATTERN = String.format("\\Q%s\\E|[.,!?;:-]", ELLIPSIS);
+    public static final String LETTER_PATTERN = "[а-яА-Яa-zA-Z]";
     public static final String DIGIT_PATTERN = "\\d";
 
     // Word patterns
-    public static final String WORD_PATTERN = "[a-zA-Z]+(?:[-'][a-zA-Z]+)*";
+    public static final String WORD_PATTERN = "[а-яА-Яa-zA-Z0-9_]+(?:[-\\.'][а-яА-Яa-zA-Z0-9_]+)*";
     public static final String WORD_WITH_PUNCTUATION_PATTERN = String.format("^(%s)(%s)$", WORD_PATTERN, PUNCTUATION_PATTERN);
     public static final String WORD_BOUNDARY_PATTERN = "\\b";
+    
+    // New patterns for bracketed words
+    public static final String BRACKET_PATTERN = "[\\[\\](){}]";
+    public static final String QUOTE_PATTERN = "[\"'“”]";
+    public static final String WORD_WITH_BRACKETS_PATTERN = String.format("^(%s)?(%s)(%s)?(%s)?$", 
+        BRACKET_PATTERN, WORD_PATTERN, BRACKET_PATTERN, PUNCTUATION_PATTERN);
+    public static final String WORD_WITH_QUOTES_PATTERN = String.format("^(%s)?(%s)(%s)?(%s)?$", 
+        QUOTE_PATTERN, WORD_PATTERN, QUOTE_PATTERN, PUNCTUATION_PATTERN);
 
     // Expression patterns
     public static final String NUMBER_PATTERN = "\\d+(?:\\.\\d+)?";
-    public static final String OPERATOR_PATTERN = "[+\\-*/=<>!&|]";
+    public static final String OPERATOR_PATTERN = "[+\\-*/=<>!&|]+";
     public static final String EXPRESSION_PATTERN = String.format("%s\\s*(?:%s\\s*%s\\s*)*",
         NUMBER_PATTERN, OPERATOR_PATTERN, NUMBER_PATTERN);
+    public static final String TOKEN_PATTERN = String.format("(%s)|(%s)", NUMBER_PATTERN, OPERATOR_PATTERN);
 } 

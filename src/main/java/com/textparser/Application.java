@@ -51,19 +51,18 @@ public class Application {
             
             // Read file
             String text = fileReaderService.readTextFromFile(filePath);
-            System.out.println("File read successfully. Content length: " + text.length() + " characters");
+            logger.info("File read successfully. Content length: {} characters", text.length());
             
             // Parse text
             Document document = textParsingService.parseText(text);
-            System.out.println("Text parsed successfully. Document contains " + 
-                             document.getParagraphs().size() + " paragraphs");
+            logger.info("Text parsed successfully. Document contains {} paragraphs, {} sentences, {} words", 
+                             document.getParagraphs().size(), document.getAllSentences().size(), document.getAllWords().size());
             
             // Perform analysis
             performAnalysis(document);
             
         } catch (Exception e) {
             logger.error("Error processing file: {}", filePath, e);
-            System.err.println("Error processing file: " + e.getMessage());
         }
     }
 

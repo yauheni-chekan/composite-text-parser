@@ -22,9 +22,9 @@ public class ExpressionParser extends AbstractTextParser {
 
     @Override
     public TextComponent parse(String text) {
-        logger.debug("Attempting to parse expression: {}", text);
         
         if (interpreter.isValidExpression(text)) {
+            logger.debug("Attempting to parse expression: {}", text);
             try {
                 double result = interpreter.evaluate(text);
                 logger.info("Successfully evaluated expression '{}' = {}", text, result);

@@ -13,7 +13,10 @@ import java.util.regex.Pattern;
  * Parser for words.
  * Responsible for parsing text into words.
  * A word consists of letters, possibly with hyphens or apostrophes.
- * Can also handle lexemes that contain a word followed by punctuation.
+ * Can also handle lexemes that contain:
+ * - Words with punctuation
+ * - Words surrounded by brackets or parentheses
+ * - Words surrounded by quotes
  */
 public class WordParser extends AbstractTextParser {
     @Override
@@ -21,6 +24,20 @@ public class WordParser extends AbstractTextParser {
         // First try to match a complete word
         if (matches(text, TextConstants.WORD_PATTERN)) {
             return new Word(text);
+        }
+
+        // Try to match a word with brackets/parentheses
+        Pattern bracketPattern = Pattern.compile(TextConstants.WORD_WITH_BRACKETS_PATTERN, Pattern.MULTILINE);
+        Matcher bracketMatcher = bracketPattern.matcher(text);
+        if (bracketMatcher.matches()) {
+            return createLexemeWithSurroundings(bracketMatcher);
+        }
+
+        // Try to match a word with quotes
+        Pattern quotePattern = Pattern.compile(TextConstants.WORD_WITH_QUOTES_PATTERN, Pattern.MULTILINE);
+        Matcher quoteMatcher = quotePattern.matcher(text);
+        if (quoteMatcher.matches()) {
+            return createLexemeWithSurroundings(quoteMatcher);
         }
 
         // Try to match a word followed by punctuation
@@ -47,4 +64,43 @@ public class WordParser extends AbstractTextParser {
 
         return parseNext(text);
     }
-} 
+
+    /**
+     * Create a lexeme from a matcher that has matched a word with surrounding characters
+     * @param matcher the matcher containing the matched groups
+     * @return a new Lexeme containing the word and its surroundings
+     */
+    private Lexeme createLexemeWithSurroundings(Matcher matcher) {
+        String openingChar = matcher.group(1);
+        String wordText = matcher.group(2);
+        String closingChar = matcher.group(3);
+        String punctuationText = matcher.group(4);
+
+        // Create a new lexeme to hold all components
+        Lexeme lexeme = new Lexeme(matcher.group(0));
+
+        // Add the opening character
+        if (openingChar != null && !openingChar.isEmpty()) {
+            Symbol opening = new Symbol(openingChar);
+            lexeme.add(opening);
+        }
+
+        // Add the word
+        Word word = new Word(wordText);
+        lexeme.add(word);
+
+        // Add the closing character
+        if (closingChar != null && !closingChar.isEmpty()) {
+            Symbol closing = new Symbol(closingChar);
+            lexeme.add(closing);
+        }
+
+        // Add punctuation if present
+        if (punctuationText != null && !punctuationText.isEmpty()) {
+            Symbol punctuation = new Symbol(punctuationText);
+            lexeme.add(punctuation);
+        }
+
+        return lexeme;
+    }
+}

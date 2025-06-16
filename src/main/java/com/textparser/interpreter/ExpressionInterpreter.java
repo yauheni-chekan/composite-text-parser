@@ -6,6 +6,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Stack;
 
+import com.textparser.util.TextConstants;
+
 /**
  * Expression interpreter using functional interfaces.
  * Implements the Interpreter pattern for evaluating arithmetic expressions.
@@ -59,7 +61,7 @@ public class ExpressionInterpreter {
      * @return true if it's a valid expression
      */
     public boolean isValidExpression(String text) {
-        String pattern = "^\\s*\\d+(?:\\.\\d+)?(?:\\s*[+\\-*/]\\s*\\d+(?:\\.\\d+)?)*\\s*$";
+        String pattern = TextConstants.EXPRESSION_PATTERN;
         return text.matches(pattern);
     }
     
@@ -124,7 +126,7 @@ public class ExpressionInterpreter {
      * Tokenize the expression into numbers and operators
      */
     private String[] tokenize(String expression) {
-        Pattern pattern = Pattern.compile("\\d+(?:\\.\\d+)?|[+\\-*/]");
+        Pattern pattern = Pattern.compile(TextConstants.TOKEN_PATTERN);
         Matcher matcher = pattern.matcher(expression);
         
         java.util.List<String> tokens = new java.util.ArrayList<>();
