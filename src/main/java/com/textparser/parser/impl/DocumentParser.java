@@ -16,14 +16,16 @@ public class DocumentParser extends AbstractTextParser {
     @Override
     public TextComponent parse(String text) {
         Document document = new Document();
-        logger.debug("Extracting paragraphs using regex groups");
+
+        logger.info("Extracting paragraphs from text.");
         String[] paragraphs = split(text, TextConstants.PARAGRAPH_SPLIT_PATTERN);
-        logger.debug("Found {} paragraphs", paragraphs.length);
         for (String paragraph : paragraphs) {
             if (!trim(paragraph).isEmpty()) {
                 TextComponent paragraphComponent = parseNext(paragraph);
                 if (paragraphComponent != null) {
                     document.add(paragraphComponent);
+                } else {
+                    logger.error("Failed to parse paragraph: {}", paragraph);
                 }
             }
         }

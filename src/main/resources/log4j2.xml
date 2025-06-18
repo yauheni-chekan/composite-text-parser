@@ -29,7 +29,7 @@
             <AppenderRef ref="FileAppender"/>
         </Root>
         
-        <Logger name="com.textparser" level="debug" additivity="false">
+        <Logger name="com.textparser" level="info" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="FileAppender"/>
         </Logger>

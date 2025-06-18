@@ -22,12 +22,12 @@ public class ExpressionParser extends AbstractTextParser {
 
     @Override
     public TextComponent parse(String text) {
-        
+        logger.debug("Parsing expression: {}", text);
         if (interpreter.isValidExpression(text)) {
-            logger.debug("Attempting to parse expression: {}", text);
+            logger.debug("Expression is valid: {}", text);
             try {
                 double result = interpreter.evaluate(text);
-                logger.info("Successfully evaluated expression '{}' = {}", text, result);
+                logger.debug("Successfully evaluated expression '{}' = {}", text, result);
                 return new Expression(text, result);
             } catch (Exception e) {
                 logger.warn("Failed to evaluate expression '{}': {}", text, e.getMessage());
@@ -35,7 +35,7 @@ public class ExpressionParser extends AbstractTextParser {
                 return parseNext(text);
             }
         }
-        
+        logger.error("Invalid expression: {}", text);
         return parseNext(text);
     }
 } 
