@@ -31,7 +31,6 @@ public final class TextConstants {
     // Word patterns
     public static final String WORD_PATTERN = "[а-яА-Яa-zA-Z0-9_]+(?:[-\\.'][а-яА-Яa-zA-Z0-9_]+)*";
     public static final String WORD_WITH_PUNCTUATION_PATTERN = String.format("^(%s)(%s)$", WORD_PATTERN, PUNCTUATION_PATTERN);
-    public static final String WORD_BOUNDARY_PATTERN = "\\b";
     
     // New patterns for bracketed words
     public static final String BRACKET_PATTERN = "[\\[\\](){}]";

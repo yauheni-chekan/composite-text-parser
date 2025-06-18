@@ -8,6 +8,9 @@ import com.textparser.util.VowelConsonantUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +23,6 @@ public class TextOperationsService {
 
     /**
      * Operation 1: Sort paragraphs by number of sentences
-     * Requirement: "Отсортировать абзацы по количеству предложений"
      */
     public List<Paragraph> sortParagraphsBySentenceCount(Document document) {
         logger.info("Executing operation: Sort paragraphs by sentence count");
@@ -29,7 +31,6 @@ public class TextOperationsService {
 
     /**
      * Operation 2: Find sentences with the longest word
-     * Requirement: "Найти предложения с самым длинным словом"
      */
     public List<Sentence> findSentencesWithLongestWord(Document document) {
         logger.info("Executing operation: Find sentences with longest word");
@@ -38,7 +39,6 @@ public class TextOperationsService {
 
     /**
      * Operation 3: Remove sentences with word count less than specified
-     * Requirement: "Удалить из текста все предложения с числом слов меньше заданного"
      */
     public Document removeShortSentences(Document document, int minWordCount) {
         logger.info("Executing operation: Remove sentences with fewer than {} words", minWordCount);
@@ -47,7 +47,6 @@ public class TextOperationsService {
 
     /**
      * Operation 4: Find and count identical words (case insensitive)
-     * Requirement: "Найти в тексте все одинаковые слова без учета регистра и посчитать их количество"
      */
     public Map<String, Integer> countIdenticalWords(Document document) {
         logger.info("Executing operation: Count identical words");
@@ -64,7 +63,6 @@ public class TextOperationsService {
 
     /**
      * Operation 5: Count vowels and consonants in sentences
-     * Requirement: "Подсчитать в предложении число гласных и согласных букв"
      */
     public Map<String, VowelConsonantUtils.VowelConsonantCount> countVowelsConsonants(Document document) {
         logger.info("Executing operation: Count vowels and consonants in sentences");
@@ -109,6 +107,16 @@ public class TextOperationsService {
         }
         
         return report;
+    }
+
+
+    public void writeReportToFile(TextAnalysisReport report, String filePath) {
+        logger.info("Writing report to file: {}", filePath);
+        try {
+            Files.writeString(Paths.get(filePath), report.toString());
+        } catch (IOException e) {
+            logger.error("Error writing report to file", e);
+        }
     }
 
     /**

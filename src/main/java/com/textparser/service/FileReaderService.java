@@ -23,7 +23,7 @@ public class FileReaderService {
      * @throws IOException if file cannot be read
      */
     public String readTextFromFile(String filePath) throws IOException {
-        logger.info("Reading text from file: {}", filePath);
+        logger.debug("Reading text from file: {}", filePath);
         
         Path path = Paths.get(filePath);
         if (!Files.exists(path)) {

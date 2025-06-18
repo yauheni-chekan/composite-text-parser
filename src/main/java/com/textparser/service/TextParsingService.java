@@ -45,7 +45,7 @@ public class TextParsingService {
 
     /**
      * Create and configure the parser chain
-     * Chain order: Document -> Paragraph -> Sentence -> Expression -> Lexeme -> Word -> Symbol
+     * Chain order: Document -> Paragraph -> Sentence -> Lexeme -> Word -> Expression -> Symbol
      */
     private TextParser createParserChain() {
         logger.debug("Creating parser chain");
@@ -55,8 +55,8 @@ public class TextParsingService {
         SentenceParser sentenceParser = new SentenceParser();
         LexemeParser lexemeParser = new LexemeParser();
         WordParser wordParser = new WordParser();
-        SymbolParser symbolParser = new SymbolParser();
         ExpressionParser expressionParser = new ExpressionParser();
+        SymbolParser symbolParser = new SymbolParser();
 
         // Configure the chain
         documentParser.setNext(paragraphParser);
