@@ -16,7 +16,7 @@ public class Symbol extends TextLeaf {
     public Symbol(String symbol) {
         super(symbol);
         if (symbol.length() != 1 && !symbol.equals(TextConstants.ELLIPSIS)) {
-            throw new IllegalArgumentException("Symbol must be a single character or '" + TextConstants.ELLIPSIS + "'");
+            throw new IllegalArgumentException(String.format("Symbol must be a single character or '%s'", TextConstants.ELLIPSIS));
         }
     }
 
@@ -32,50 +32,21 @@ public class Symbol extends TextLeaf {
     }
 
     @Override
+    public int getParagraphCount() {
+        return 0;
+    }
+
+    @Override
+    public int getSentenceCount() {
+        return 0;
+    }
+
+    @Override
     public int getWordCount() {
         // A single symbol is never a word
         return 0;
     }
 
-    /**
-     * Check if this symbol is a letter
-     * @return true if the symbol is a letter
-     */
-    public boolean isLetter() {
-        return !isEllipsis() && text.matches(TextConstants.LETTER_PATTERN);
-    }
-
-    /**
-     * Check if this symbol is a digit
-     * @return true if the symbol is a digit
-     */
-    public boolean isDigit() {
-        return !isEllipsis() && text.matches(TextConstants.DIGIT_PATTERN);
-    }
-
-    /**
-     * Check if this symbol is whitespace
-     * @return true if the symbol is whitespace
-     */
-    public boolean isWhitespace() {
-        return !isEllipsis() && text.matches(TextConstants.WHITESPACE_PATTERN);
-    }
-
-    /**
-     * Check if this symbol is punctuation
-     * @return true if the symbol is punctuation
-     */
-    public boolean isPunctuation() {
-        return isEllipsis() || text.matches(TextConstants.PUNCTUATION_PATTERN);
-    }
-
-    /**
-     * Check if this symbol is an operator
-     * @return true if the symbol is an operator
-     */
-    public boolean isOperator() {
-        return !isEllipsis() && text.matches(TextConstants.OPERATOR_PATTERN);
-    }
 
     /**
      * Check if this symbol is an ellipsis

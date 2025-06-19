@@ -32,10 +32,9 @@ public class Lexeme extends TextComposite {
 
     @Override
     public int getWordCount() {
-        // Count only children that are words
-        return (int) getChildren().stream()
-                .filter(child -> child instanceof Word)
-                .count();
+        return getChildren().stream()
+                .mapToInt(TextComponent::getWordCount)
+                .sum();
     }
 
     @Override

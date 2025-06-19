@@ -34,6 +34,16 @@ public class Expression extends TextLeaf {
     }
 
     @Override
+    public int getParagraphCount() {
+        return 0;
+    }
+
+    @Override
+    public int getSentenceCount() {
+        return 0;
+    }
+
+    @Override
     public int getWordCount() {
         return 0; // Expressions are not words
     }
@@ -41,6 +51,6 @@ public class Expression extends TextLeaf {
     @Override
     public String getText() {
         // Return the evaluated value as required by specification
-        return text;
+        return String.valueOf(evaluatedValue);
     }
 } 

@@ -56,7 +56,7 @@ public class Application {
             // Parse text
             Document document = textParsingService.parseText(text);
             logger.info("Text parsed successfully. Document contains {} paragraphs, {} sentences, {} words", 
-                             document.getParagraphs().size(), document.getAllSentences().size(), document.getAllWords().size());
+                             document.getParagraphCount(), document.getSentenceCount(), document.getWordCount());
             
             // Perform analysis
             performAnalysis(document);

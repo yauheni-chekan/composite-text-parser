@@ -16,6 +16,16 @@ public class Word extends TextLeaf {
     }
 
     @Override
+    public int getParagraphCount() {
+        return 0;
+    }
+
+    @Override
+    public int getSentenceCount() {
+        return 0;
+    }
+
+    @Override
     public int getWordCount() {
         return 1; // A Word is always a word
     }

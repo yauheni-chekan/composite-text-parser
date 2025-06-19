@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 /**
  * Operation to find and count identical words in the document (case insensitive).
- * Requirement: "Найти в тексте все одинаковые слова без учета регистра и посчитать их количество"
  */
 public class CountIdenticalWords implements TextOperation<Map<String, Integer>> {
     private static final Logger logger = LogManager.getLogger(CountIdenticalWords.class);
@@ -31,34 +30,28 @@ public class CountIdenticalWords implements TextOperation<Map<String, Integer>> 
         logger.debug("Found {} unique words (case insensitive)", wordCounts.size());
         
         // Log words that appear more than once
-        Map<String, Integer> duplicateWords = wordCounts.entrySet().stream()
-                .filter(entry -> entry.getValue() > 1)
-                .collect(Collectors.toMap(
-                    Map.Entry::getKey,
-                    Map.Entry::getValue
-                ));
+        Map<String, Integer> duplicateWords = getDuplicateWords(wordCounts);
         
         logger.info("Found {} words that appear more than once", duplicateWords.size());
         
-        // Log the most frequent words
+        // Log 5 most frequent words
         duplicateWords.entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-                .limit(10)
+                .limit(5)
                 .forEach(entry -> 
                     logger.debug("Word '{}' appears {} times", entry.getKey(), entry.getValue())
                 );
         
-        return wordCounts;
+        return duplicateWords;
     }
 
     /**
      * Get only the words that appear more than once
-     * @param document the document to analyze
+     * @param wordCounts the map of words and their counts
      * @return map of duplicate words and their counts
      */
-    public Map<String, Integer> getDuplicateWords(Document document) {
-        Map<String, Integer> allCounts = execute(document);
-        return allCounts.entrySet().stream()
+    public Map<String, Integer> getDuplicateWords(Map<String, Integer> wordCounts) {
+        return wordCounts.entrySet().stream()
                 .filter(entry -> entry.getValue() > 1)
                 .collect(Collectors.toMap(
                     Map.Entry::getKey,

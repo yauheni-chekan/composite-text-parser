@@ -9,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Operation to remove sentences with fewer words than the specified threshold.
- * Requirement: "Удалить из текста все предложения с числом слов меньше заданного"
  */
 public class RemoveShortSentences implements TextOperation<Document> {
     private static final Logger logger = LogManager.getLogger(RemoveShortSentences.class);

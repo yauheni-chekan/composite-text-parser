@@ -73,6 +73,8 @@ public class ExpressionInterpreter {
         Stack<String> operatorStack = new Stack<>();
         
         String[] tokens = tokenize(infix);
+        final String LEFT_PAREN = "(";
+        final String RIGHT_PAREN = ")";
         
         for (String token : tokens) {
             if (isNumber(token)) {
@@ -84,11 +86,31 @@ public class ExpressionInterpreter {
                     output.append(operatorStack.pop()).append(" ");
                 }
                 operatorStack.push(token);
+            } else if (LEFT_PAREN.equals(token)) {
+                operatorStack.push(token);
+            } else if (RIGHT_PAREN.equals(token)) {
+                boolean foundLeftParen = false;
+                while (!operatorStack.isEmpty()) {
+                    String op = operatorStack.pop();
+                    if (LEFT_PAREN.equals(op)) {
+                        foundLeftParen = true;
+                        break;
+                    } else {
+                        output.append(op).append(" ");
+                    }
+                }
+                if (!foundLeftParen) {
+                    throw new IllegalArgumentException("Mismatched parentheses in expression");
+                }
             }
         }
         
         while (!operatorStack.isEmpty()) {
-            output.append(operatorStack.pop()).append(" ");
+            String op = operatorStack.pop();
+            if (LEFT_PAREN.equals(op) || RIGHT_PAREN.equals(op)) {
+                throw new IllegalArgumentException("Mismatched parentheses in expression");
+            }
+            output.append(op).append(" ");
         }
         
         return output.toString().trim();
@@ -99,7 +121,7 @@ public class ExpressionInterpreter {
      */
     private double evaluatePostfix(String postfix) {
         Stack<Double> stack = new Stack<>();
-        String[] tokens = postfix.split("\\s+");
+        String[] tokens = postfix.split(TextConstants.WHITESPACE_PATTERN);
         
         for (String token : tokens) {
             if (isNumber(token)) {

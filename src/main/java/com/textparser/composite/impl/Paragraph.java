@@ -1,7 +1,6 @@
 package com.textparser.composite.impl;
 
 import com.textparser.composite.TextComposite;
-import com.textparser.util.TextConstants;
 
 /**
  * Represents a paragraph in the text structure.
@@ -20,18 +19,16 @@ public class Paragraph extends TextComposite {
             // Add space between sentences except for the last one
             if (i < children.size() - 1) {
                 result.append(" ");
+            } else {
+                result.append("\n");
             }
         }
         
         return result.toString();
     }
 
-    /**
-     * Check if the given text starts with a valid paragraph indent
-     * @param text the text to check
-     * @return true if the text starts with a tab or 4 spaces
-     */
-    public static boolean hasValidIndent(String text) {
-        return text.matches(TextConstants.PARAGRAPH_SPLIT_PATTERN + ".*");
+    @Override
+    public int getParagraphCount() {
+        return 1;
     }
 } 

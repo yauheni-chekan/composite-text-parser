@@ -58,7 +58,7 @@ public class TextOperationsService {
      */
     public Map<String, Integer> getDuplicateWords(Document document) {
         logger.info("Executing operation: Get duplicate words only");
-        return new CountIdenticalWords().getDuplicateWords(document);
+        return new CountIdenticalWords().execute(document);
     }
 
     /**

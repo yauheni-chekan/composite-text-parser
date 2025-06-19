@@ -37,6 +37,18 @@ public interface TextComponent {
      * @return the text content
      */
     String getText();
+    
+    /**
+     * Get the number of paragraphs in this component
+     * @return paragraph count
+     */
+    int getParagraphCount();
+
+    /**
+     * Get the number of sentences in this component
+     * @return sentence count
+     */
+    int getSentenceCount();
 
     /**
      * Get the number of words in this component

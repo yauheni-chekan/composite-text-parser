@@ -22,7 +22,7 @@ public class SortParagraphsBySentenceCount implements TextOperation<List<Paragra
         logger.info("Sorting paragraphs by sentence count");
         
         List<Paragraph> sortedParagraphs = document.getParagraphs().stream()
-                .sorted(Comparator.comparing(paragraph -> paragraph.getChildren().size()))
+                .sorted(Comparator.comparing(paragraph -> paragraph.getSentenceCount()))
                 .collect(Collectors.toList());
         
         logger.debug("Sorted {} paragraphs by sentence count", sortedParagraphs.size());

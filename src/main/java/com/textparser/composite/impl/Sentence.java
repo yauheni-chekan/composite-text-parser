@@ -21,13 +21,7 @@ public class Sentence extends TextComposite {
     }
 
     @Override
-    public void print() {
-        for (int i = 0; i < children.size(); i++) {
-            children.get(i).print();
-            if (i < children.size() - 1) {
-                System.out.print(" ");
-            }
-        }
-        System.out.print(". ");
+    public int getSentenceCount() {
+        return 1;
     }
 } 

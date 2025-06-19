@@ -40,11 +40,26 @@ public abstract class TextComposite implements TextComponent {
     }
 
     @Override
+    public int getParagraphCount() {
+        return children.stream()
+                .mapToInt(TextComponent::getParagraphCount)
+                .sum();
+    }
+    
+    @Override
+    public int getSentenceCount() {
+        return children.stream()
+                .mapToInt(TextComponent::getSentenceCount)
+                .sum();
+    }
+
+    @Override
     public int getWordCount() {
         return children.stream()
                 .mapToInt(TextComponent::getWordCount)
                 .sum();
     }
+
 
     @Override
     public void print() {
