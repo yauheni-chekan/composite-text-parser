@@ -119,6 +119,19 @@ public class TextOperationsService {
         }
     }
 
+    public void writeReportToFile(String report, String filePath) {
+        logger.info("Writing report to file: {}", filePath);
+        if (report == null || report.isEmpty()) {
+            logger.error("Report is empty");
+            return;
+        }
+        try {
+            Files.writeString(Paths.get(filePath), report);
+        } catch (IOException e) {
+            logger.error("Error writing report to file", e);
+        }
+    }
+
     /**
      * Data class to hold results of complete analysis
      */

@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 
 /**
  * Operation to sort paragraphs by the number of sentences they contain.
- * Requirement: "Отсортировать абзацы по количеству предложений"
  */
 public class SortParagraphsBySentenceCount implements TextOperation<List<Paragraph>> {
     private static final Logger logger = LogManager.getLogger(SortParagraphsBySentenceCount.class);

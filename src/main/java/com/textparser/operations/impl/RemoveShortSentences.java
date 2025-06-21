@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class RemoveShortSentences implements TextOperation<Document> {
     private static final Logger logger = LogManager.getLogger(RemoveShortSentences.class);
-    private final int minWordCount;
+    private int minWordCount;
 
     public RemoveShortSentences(int minWordCount) {
         this.minWordCount = minWordCount;
@@ -71,4 +71,17 @@ public class RemoveShortSentences implements TextOperation<Document> {
     public int getMinWordCount() {
         return minWordCount;
     }
-} 
+
+    /**
+     * Set the minimum word count threshold
+     * @param minWordCount the minimum word count
+     */
+    public void setMinWordCount(int minWordCount) {
+        if (minWordCount < 1) {
+            logger.error("Minimum word count must be greater than 0");
+            this.minWordCount = 1;
+            return;
+        }
+        this.minWordCount = minWordCount;
+    }
+}

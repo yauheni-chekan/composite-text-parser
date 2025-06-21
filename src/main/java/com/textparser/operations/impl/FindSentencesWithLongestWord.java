@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 
 /**
  * Operation to find sentences containing the longest word in the document.
- * Requirement: "Найти предложения с самым длинным словом"
  */
 public class FindSentencesWithLongestWord implements TextOperation<List<Sentence>> {
     private static final Logger logger = LogManager.getLogger(FindSentencesWithLongestWord.class);

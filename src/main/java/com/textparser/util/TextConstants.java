@@ -9,6 +9,13 @@ public final class TextConstants {
         // Prevent instantiation
     }
 
+    // File paths
+    public static final String OUTPUT_FILE_PATH = "text_analysis_report.txt";
+
+    // Date and time patterns
+    public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_TIME_PATTERN_FOR_FILE_NAME = "yyyy-MM-dd_HH-mm-ss";
+
     // Special symbols
     public static final String ELLIPSIS = "...";
 
@@ -26,6 +33,8 @@ public final class TextConstants {
     // Symbol patterns
     public static final String PUNCTUATION_PATTERN = String.format("\\Q%s\\E|[.,!?;:-]", ELLIPSIS);
     public static final String LETTER_PATTERN = "[а-яА-Яa-zA-Z]";
+    public static final String VOWEL_PATTERN_RUSSIAN = "[аеёиоуыэюяАЕЁИОУЫЭЮЯ]";
+    public static final String VOWEL_PATTERN_ENGLISH = "[aeiouyAEIOUY]";
     public static final String DIGIT_PATTERN = "\\d";
 
     // Word patterns

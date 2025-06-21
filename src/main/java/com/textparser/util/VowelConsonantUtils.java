@@ -1,7 +1,5 @@
 package com.textparser.util;
 
-import java.util.Set;
-
 /**
  * Utility class for vowel and consonant detection.
  * Supports both English and Russian letters.
@@ -11,22 +9,13 @@ public final class VowelConsonantUtils {
         // Prevent instantiation
     }
 
-    // English vowels
-    private static final Set<Character> ENGLISH_VOWELS = Set.of('a', 'e', 'i', 'o', 'u', 'y');
-    
-    // Russian vowels (а, е, ё, и, о, у, ы, э, ю, я)
-    private static final Set<Character> RUSSIAN_VOWELS = Set.of(
-        'а', 'е', 'ё', 'и', 'о', 'у', 'ы', 'э', 'ю', 'я'
-    );
-
     /**
      * Check if a character is a vowel (English or Russian)
      * @param ch the character to check
      * @return true if the character is a vowel
      */
     public static boolean isVowel(char ch) {
-        char lowercase = Character.toLowerCase(ch);
-        return ENGLISH_VOWELS.contains(lowercase) || RUSSIAN_VOWELS.contains(lowercase);
+        return String.valueOf(ch).matches(TextConstants.VOWEL_PATTERN_ENGLISH) || String.valueOf(ch).matches(TextConstants.VOWEL_PATTERN_RUSSIAN);
     }
 
     /**
@@ -35,7 +24,7 @@ public final class VowelConsonantUtils {
      * @return true if the character is a consonant
      */
     public static boolean isConsonant(char ch) {
-        return Character.isLetter(ch) && !isVowel(ch);
+        return String.valueOf(ch).matches(TextConstants.LETTER_PATTERN) && !isVowel(ch);
     }
 
     /**
