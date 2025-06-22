@@ -17,13 +17,7 @@ A Java application that parses text files and performs various operations using 
 
 ## Implementation Plan
 
-### Phase 1: Project Setup
-1. Set up Maven/Gradle project structure
-2. Configure Log4J2
-3. Set up testing framework (JUnit 5)
-4. Create basic project documentation
-
-### Phase 2: Core Structure Implementation
+### Core Structure Implementation
 1. Create Composite Pattern Components:
    - `TextComponent` interface
    - `TextLeaf` abstract class
@@ -42,7 +36,7 @@ A Java application that parses text files and performs various operations using 
    - Word boundaries
    - Expression patterns
 
-### Phase 3: Parser Implementation (Chain of Responsibility)
+### Parser Implementation (Chain of Responsibility)
 1. Create base parser interface/abstract class
 2. Implement concrete parsers:
    - `ParagraphParser`
@@ -52,16 +46,13 @@ A Java application that parses text files and performs various operations using 
    - `ExpressionParser`
 3. Implement parser chain configuration
 
-### Phase 4: Expression Interpreter
+### Expression Interpreter
 1. Create expression grammar
 2. Implement expression components:
    - `Expression` interface
-   - `NumberExpression`
-   - `BinaryExpression`
-   - `UnaryExpression`
-3. Implement expression evaluator using functional interfaces
+3. Implement expression evaluator using functional interfaces and reverse polish notation
 
-### Phase 5: Text Operations
+### Text Operations
 Implement five text operations:
 1. Text statistics (word count, sentence count, etc.)
 2. Text formatting (capitalization, spacing)
@@ -69,7 +60,7 @@ Implement five text operations:
 4. Text search
 5. Text transformation
 
-### Phase 6: Logging Implementation
+### Logging Implementation
 1. Configure Log4J2
 2. Implement logging for:
    - Parser operations
@@ -77,7 +68,7 @@ Implement five text operations:
    - Text operations
    - Error handling
 
-### Phase 7: Testing
+### Testing
 1. Unit tests for:
    - Composite components
    - Parsers
@@ -85,36 +76,6 @@ Implement five text operations:
    - Text operations
 2. Integration tests
 3. Performance tests
-
-### Phase 8: Documentation and Cleanup
-1. Code documentation
-2. Usage examples
-3. Performance optimization
-4. Code review and cleanup
-
-## Project Structure
-```
-src/
-├── main/
-│ ├── java/
-│ │ └── com/
-│ │ └── textparser/
-│ │ ├── composite/
-│ │ ├── parser/
-│ │ ├── interpreter/
-│ │ ├── operations/
-│ │ └── util/
-│ └── resources/
-│ └── log4j2.xml
-└── test/
-└── java/
-└── com/
-└── textparser/
-├── composite/
-├── parser/
-├── interpreter/
-└── operations/
-```
 
 ## Design Patterns Used
 1. Composite Pattern - Text structure
@@ -124,16 +85,123 @@ src/
 5. Factory Pattern - Object creation
 
 ## Dependencies
+- Java 17+
 - JUnit 5
 - Log4J2
-- Maven/Gradle
+- Maven
 - AssertJ (for testing)
 
-## Next Steps
-1. Set up project structure
-2. Implement basic composite components
-3. Create parser chain
-4. Add expression interpreter
-5. Implement text operations
-6. Add logging
-7. Write tests
+## Usage
+
+### Prerequisites
+- Java 17 or higher
+- Maven 3.6+
+
+### Building the Application
+
+1. Clone the repository and navigate to the project directory
+2. Build the project using Maven:
+```bash
+mvn clean compile
+```
+
+3. Run tests:
+```bash
+mvn test
+```
+
+4. Create executable JAR:
+```bash
+mvn package
+```
+
+### Running the Application
+
+#### Method 1: Command Line with File Argument
+```bash
+java -jar target/composite-text-parser-1.0-SNAPSHOT-jar-with-dependencies.jar sample-text.txt
+```
+
+#### Method 2: Interactive Mode
+```bash
+java -jar target/composite-text-parser-1.0-SNAPSHOT-jar-with-dependencies.jar
+```
+
+When running in interactive mode, you'll see:
+```
+=== Composite Text Parser ===
+Enter the path to your text file:
+> sample-text.txt
+```
+
+Enter `exit` or `quit` to terminate the application.
+
+### Sample Input File Format
+
+The application expects text files with paragraphs separated by indentation (tab or 4 spaces):
+```
+    This is the first paragraph with a simple sentence. It contains multiple words and punctuation! The result of 2+3 equals five.
+    Here is the second paragraph. This one has arithmetic: 10-5 gives us the result. Mathematical expressions like 4*6 should be evaluated properly...
+    The third paragraph is shorter. It has fewer words than others...
+```
+
+### Text Operations Performed
+
+The application automatically performs five text analysis operations:
+
+1. **Sort Paragraphs by Sentence Count**
+   - Orders paragraphs from most to least sentences
+   - Useful for identifying content density
+
+2. **Find Sentences with Longest Words**
+   - Identifies sentences containing the longest words in the document
+   - Helps locate complex or technical content
+
+3. **Remove Short Sentences** (Configurable)
+   - Filters out sentences with fewer than specified words
+   - Useful for content cleanup and analysis
+
+4. **Count Identical Words** (Case Insensitive)
+   - Generates frequency map of all words
+   - Identifies most commonly used terms
+
+5. **Count Vowels and Consonants**
+   - Analyzes vowel/consonant distribution per sentence
+   - Provides phonetic analysis of the text
+
+### Output and Reports
+
+The application generates:
+- Console output with analysis summary
+- Detailed report files in the `reports/` directory
+- Log files in the `logs/` directory for debugging
+
+Sample output:
+```
+=== Text Analysis Results ===
+Generated on: 2024-01-15 14:30:45
+
+1. Paragraphs sorted by sentence count:
+   Paragraph 1: 3 sentences
+   Paragraph 2: 4 sentences
+   Paragraph 3: 2 sentences
+
+2. Sentences with longest word:
+   Finally, the last paragraph demonstrates various features.
+   Mathematical expressions like 4*6 should be evaluated properly...
+
+3. Most frequent words (case insensitive):
+   'the': 8 times
+   'and': 6 times
+   'is': 4 times
+
+4. Vowel and consonant analysis:
+   Total vowels: 245, Total consonants: 398
+```
+
+### Expression Evaluation
+
+The application can evaluate arithmetic expressions within the text:
+- Basic operations: `+`, `-`, `*`, `/`
+- Expressions like `2+3`, `10-5`, `4*6`, `15/3`
+- Results are processed using the Interpreter pattern
