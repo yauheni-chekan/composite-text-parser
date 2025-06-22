@@ -10,6 +10,7 @@ public final class TextConstants {
     }
 
     // File paths
+    public static final String REPORT_FOLDER_PATH = "reports";
     public static final String OUTPUT_FILE_PATH = "text_analysis_report.txt";
 
     // Date and time patterns

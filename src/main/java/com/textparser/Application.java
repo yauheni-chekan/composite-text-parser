@@ -3,13 +3,14 @@ package com.textparser;
 import com.textparser.composite.impl.Document;
 import com.textparser.service.FileReaderService;
 import com.textparser.service.TextOperationsService;
+import com.textparser.service.TextOperationsService.TextAnalysisReport;
 import com.textparser.service.TextParsingService;
 import com.textparser.util.TextConstants;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 /**
@@ -110,67 +111,14 @@ public class Application {
      * Perform all text analysis operations and save results to file
      */
     private void performAnalysis(Document document) {
-        LocalDateTime generatedDate = java.time.LocalDateTime.now();
-        String reportGenerationDate = generatedDate.format(java.time.format.DateTimeFormatter.ofPattern(TextConstants.DATE_TIME_PATTERN));
-        String reportFileDate = generatedDate.format(java.time.format.DateTimeFormatter.ofPattern(TextConstants.DATE_TIME_PATTERN_FOR_FILE_NAME));
-        String outputPath = String.format("%s_%s", reportFileDate, TextConstants.OUTPUT_FILE_PATH);
-        StringBuilder analysisOutput = new StringBuilder();
-        analysisOutput.append("=== Text Analysis Results ===\n");
-        analysisOutput.append("Generated on: ").append(reportGenerationDate).append("\n");
-         
+        TextAnalysisReport report;
+        
         try {
-            // Operation 1: Sort paragraphs by sentence count
-            analysisOutput.append("\n1. Paragraphs sorted by sentence count:\n");
-            var sortedParagraphs = textOperationsService.sortParagraphsBySentenceCount(document);
-            for (int i = 0; i < sortedParagraphs.size(); i++) {
-                var paragraph = sortedParagraphs.get(i);
-                analysisOutput.append(String.format("   Paragraph %d: %d sentences%n", 
-                                i + 1, paragraph.getChildren().size()));
-            }
-             
-            // Operation 2: Find sentences with longest word
-            analysisOutput.append("\n2. Sentences with longest word:\n");
-            var sentencesWithLongestWord = textOperationsService.findSentencesWithLongestWord(document);
-            for (int i = 0; i < Math.min(sentencesWithLongestWord.size(), 3); i++) {
-                var sentence = sentencesWithLongestWord.get(i);
-                String text = sentence.getText();
-                analysisOutput.append(String.format("   %s%n", text.length() > 100 ? 
-                                text.substring(0, 100) + "..." : text));
-            }
-            if (sentencesWithLongestWord.size() > 3) {
-                analysisOutput.append(String.format("   ... and %d more sentences%n", 
-                                sentencesWithLongestWord.size() - 3));
-            }
-             
-            // Operation 3: Example of removing short sentences
-            analysisOutput.append("\n3. Document statistics after removing sentences with < 3 words:\n");
-            var filteredDocument = textOperationsService.removeShortSentences(document, 3);
-            analysisOutput.append(String.format("   Original: %d paragraphs, %d sentences%n", 
-                            document.getParagraphs().size(), 
-                            document.getAllSentences().size()));
-            analysisOutput.append(String.format("   Filtered: %d paragraphs, %d sentences%n", 
-                            filteredDocument.getParagraphs().size(), 
-                            filteredDocument.getAllSentences().size()));
-            
-            // Operation 4: Count identical words
-            analysisOutput.append("\n4. Most frequent words (case insensitive):\n");
-            var wordCounts = textOperationsService.getDuplicateWords(document);
-            wordCounts.entrySet().stream()
-                    .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
-                    .limit(10)
-                    .forEach(entry -> 
-                        analysisOutput.append(String.format("   '%s': %d times%n", entry.getKey(), entry.getValue()))
-                    );
-             
-            // Operation 5: Count vowels and consonants
-            analysisOutput.append("\n5. Vowel and consonant analysis:\n");
-            var documentSummary = textOperationsService.getDocumentVowelConsonantSummary(document);
-            analysisOutput.append(String.format("   %s%n", documentSummary.toString()));
-             
+            report = textOperationsService.performCompleteAnalysis(document);
+            String reportFileName = String.format("%s_%s", report.reportDate.format(DateTimeFormatter.ofPattern(TextConstants.DATE_TIME_PATTERN_FOR_FILE_NAME)), TextConstants.OUTPUT_FILE_PATH);
             // Write analysis to file
-            textOperationsService.writeReportToFile(analysisOutput.toString(), outputPath);
-            logger.info("Analysis results saved to: {}", outputPath);
-             
+            String reportPath = textOperationsService.writeReportToFile(report, reportFileName);
+            logger.info("Analysis results saved to: {}", reportPath);
         } catch (Exception e) {
             logger.error("Error during analysis", e);
         }

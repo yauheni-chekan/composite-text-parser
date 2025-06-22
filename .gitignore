@@ -14,6 +14,9 @@ buildNumber.properties
 logs/
 *.log
 
+# Reports
+reports/
+
 # IDE files
 .idea/
 *.iml

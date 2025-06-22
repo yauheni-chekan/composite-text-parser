@@ -4,13 +4,17 @@ import com.textparser.composite.impl.Document;
 import com.textparser.composite.impl.Paragraph;
 import com.textparser.composite.impl.Sentence;
 import com.textparser.operations.impl.*;
+import com.textparser.util.TextConstants;
 import com.textparser.util.VowelConsonantUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -94,6 +98,7 @@ public class TextOperationsService {
         TextAnalysisReport report = new TextAnalysisReport();
         
         try {
+            report.reportDate = LocalDateTime.now();
             report.sortedParagraphs = sortParagraphsBySentenceCount(document);
             report.sentencesWithLongestWord = findSentencesWithLongestWord(document);
             report.wordCounts = countIdenticalWords(document);
@@ -109,33 +114,83 @@ public class TextOperationsService {
         return report;
     }
 
-
-    public void writeReportToFile(TextAnalysisReport report, String filePath) {
-        logger.info("Writing report to file: {}", filePath);
-        try {
-            Files.writeString(Paths.get(filePath), report.toString());
-        } catch (IOException e) {
-            logger.error("Error writing report to file", e);
+    /**
+     * Format the analysis output for display
+     */
+    public String formatAnalysisOutput(TextAnalysisReport report) {
+        StringBuilder analysisOutput = new StringBuilder();
+        analysisOutput.append("=== Text Analysis Results ===\n");
+        analysisOutput.append("Generated on: ").append(report.reportDate.format(DateTimeFormatter.ofPattern(TextConstants.DATE_TIME_PATTERN))).append("\n");
+        analysisOutput.append("\n1. Paragraphs sorted by sentence count:\n");
+        for (int i = 0; i < report.sortedParagraphs.size(); i++) {
+            var paragraph = report.sortedParagraphs.get(i);
+            analysisOutput.append(String.format("   Paragraph %d: %d sentences%n", 
+                            i + 1, paragraph.getChildren().size()));
         }
+            
+        // Operation 2: Find sentences with longest word
+        analysisOutput.append("\n2. Sentences with longest word:\n");
+        for (int i = 0; i < Math.min(report.sentencesWithLongestWord.size(), 3); i++) {
+            var sentence = report.sentencesWithLongestWord.get(i);
+            String text = sentence.getText();
+            analysisOutput.append(String.format("   %s%n", text.length() > 100 ? 
+                            text.substring(0, 100) + "..." : text));
+        }
+        if (report.sentencesWithLongestWord.size() > 3) {
+            analysisOutput.append(String.format("   ... and %d more sentences%n", 
+                            report.sentencesWithLongestWord.size() - 3));
+        }
+            
+        // Operation 3: Example of removing short sentences
+        analysisOutput.append("\n3. Document statistics after removing sentences with < 3 words:\n");
+        analysisOutput.append(String.format("   Original: %d paragraphs, %d sentences%n", 
+                        report.sortedParagraphs.size(), 
+                        report.sortedParagraphs.size()));
+        analysisOutput.append(String.format("   Filtered: %d paragraphs, %d sentences%n", 
+                        report.sortedParagraphs.size(), 
+                        report.sortedParagraphs.size()));
+        
+        // Operation 4: Count identical words
+        analysisOutput.append("\n4. Most frequent words (case insensitive):\n");
+        report.wordCounts.entrySet().stream()
+                .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
+                .limit(10)
+                .forEach(entry -> 
+                    analysisOutput.append(String.format("   '%s': %d times%n", entry.getKey(), entry.getValue()))
+                );
+            
+        // Operation 5: Count vowels and consonants
+        analysisOutput.append("\n5. Vowel and consonant analysis:\n");
+        analysisOutput.append(String.format("   %s%n", report.documentSummary.toString()));
+        return analysisOutput.toString();
     }
 
-    public void writeReportToFile(String report, String filePath) {
+    /**
+     * Write the analysis report to a file
+     */
+    public String writeReportToFile(TextAnalysisReport report, String filePath) {
         logger.info("Writing report to file: {}", filePath);
-        if (report == null || report.isEmpty()) {
+        if (report == null || report.toString().isEmpty()) {
             logger.error("Report is empty");
-            return;
+            return null;
         }
+        String formattedReport = formatAnalysisOutput(report);
+        String reportPath = String.format("%s/%s", TextConstants.REPORT_FOLDER_PATH, filePath);
+        File reportFile = new File(reportPath);
+        reportFile.getParentFile().mkdirs();
         try {
-            Files.writeString(Paths.get(filePath), report);
+            Files.writeString(Paths.get(reportPath), formattedReport);
         } catch (IOException e) {
             logger.error("Error writing report to file", e);
         }
+        return reportPath;
     }
 
     /**
      * Data class to hold results of complete analysis
      */
     public static class TextAnalysisReport {
+        public LocalDateTime reportDate;
         public List<Paragraph> sortedParagraphs;
         public List<Sentence> sentencesWithLongestWord;
         public Map<String, Integer> wordCounts;
@@ -145,7 +200,8 @@ public class TextOperationsService {
         @Override
         public String toString() {
             return String.format(
-                "TextAnalysisReport{paragraphs=%d, sentencesWithLongestWord=%d, uniqueWords=%d, %s}",
+                "TextAnalysisReport{reportDate=%s, paragraphs=%d, sentencesWithLongestWord=%d, uniqueWords=%d, %s}",
+                reportDate.format(DateTimeFormatter.ofPattern(TextConstants.DATE_TIME_PATTERN)),
                 sortedParagraphs != null ? sortedParagraphs.size() : 0,
                 sentencesWithLongestWord != null ? sentencesWithLongestWord.size() : 0,
                 wordCounts != null ? wordCounts.size() : 0,
